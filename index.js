@@ -6,11 +6,11 @@ const { app, BrowserWindow, ipcMain, Menu, Tray, nativeImage } = require('electr
 
 
 //Electron
-let mainWindow;
+let win;
 
 app.on('ready', () => {
-  mainWindow = new BrowserWindow({height: 600, width: 800 });
-  mainWindow.loadFile('./public/index.html');
+  win = new BrowserWindow({height: 600, width: 800 });
+  win.loadFile('./public/index.html');
   
   let icon = nativeImage.createFromPath(join(__dirname, 'public', 'icon.png'));
   let tray = new Tray(icon);
