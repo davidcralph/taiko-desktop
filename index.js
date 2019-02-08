@@ -22,7 +22,7 @@ app.on('ready', () => {
   win = new BrowserWindow({height: 600, width: 800});
   win.loadFile('./public/index.html');
 
-  if (config.tray = true) {
+  if (config.tray === true) {
     let icon = nativeImage.createFromPath(join(__dirname, 'public', 'icon.png'));
     let tray = new Tray(icon);
     let contextMenu = Menu.buildFromTemplate([{
@@ -49,7 +49,7 @@ app.on('ready', () => {
 
 
 // Discord RPC
-if (config.rpc = true) {
+if (config.rpc === true) {
   const timestamp = new Date().getTime();
 
   const uRPC = new DiscordRPC({clientID: '536293982209310730', debug: false}); //debug gang, lets not debug for now
