@@ -1,3 +1,4 @@
+// Discord RPC
 const { ipcRenderer } = require('electron');
 
 const checkPresence = () => {
@@ -15,3 +16,12 @@ const checkPresence = () => {
 }
 
 setInterval(checkPresence, 5000);
+
+// Config
+const homedir = require('os').homedir();
+const config  = require(`${homedir}/taikoconfig.json`);
+
+if (!config.url) document.getElementById('frame').src = 'https://taiko.derpyenterprises.org';
+else document.getElementById('frame').src = config.url;
+
+
