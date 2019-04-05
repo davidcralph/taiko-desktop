@@ -52,7 +52,7 @@ app.on('ready', () => {
 if (config.rpc === true) {
   const timestamp = new Date().getTime();
 
-  const uRPC = new DiscordRPC({clientID: '536293982209310730', debug: false}); //debug gang, lets not debug for now
+  const uRPC = new DiscordRPC({ clientID: '536293982209310730', debug: false }); //debug gang, lets not debug for now
 
   const setActivity = async () => {
     ipcMain.on('RpcToSongSelect', () => {

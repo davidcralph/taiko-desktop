@@ -11,17 +11,15 @@ const checkPresence = () => {
             "difficulty": `${document.getElementById('frame').contentWindow.debugObj.controller.selectedSong.difficulty}`
         }
         ipcRenderer.send('RpcToGame', data);
-    } else if (document.getElementById('frame').contentWindow.document.getElementById('load-song')) ipcRenderer.send('RpcToLoading');
-      else ipcRenderer.send('RpcToMainMenu');
+    } 
+    else if (document.getElementById('frame').contentWindow.document.getElementById('load-song')) ipcRenderer.send('RpcToLoading');
+    else ipcRenderer.send('RpcToMainMenu');
 }
 
 setInterval(checkPresence, 5000);
 
 // Config
-const homedir = require('os').homedir();
-const config  = require(`${homedir}/taikoconfig.json`);
+const config = require(`${require('os').homedir()}/taikoconfig.json`);
 
 if (!config.url) document.getElementById('frame').src = 'https://taiko.derpyenterprises.org';
 else document.getElementById('frame').src = config.url;
-
-

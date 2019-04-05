@@ -1,5 +1,7 @@
 {
   "name": "taiko-desktop",
+  "description": "Desktop app for taiko-web with Discord RPC and tray support",
+  "author": "ohlookitsderpy",
   "version": "1.0.0",
   "devDependencies": {
     "electron": "4.1.4",
