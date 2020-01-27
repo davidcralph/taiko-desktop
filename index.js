@@ -1,8 +1,8 @@
 // Declarations
-const util                                                     = require('./modules/util');
-const { join }                                                 = require('path');
-const DiscordRPC                                               = require('./modules/rpc');
-const { existsSync, writeFileSync }                            = require('fs');
+const util = require('./modules/util');
+const path = require('path');
+const DiscordRPC = require('./modules/rpc');
+const fs = require('fs');
 const { app, BrowserWindow, ipcMain, Menu, Tray, nativeImage } = require('electron');
 
 // Config
@@ -12,14 +12,14 @@ const sample = {
   "rpc": true,
   "tray": true
 }
-if (!existsSync(`${homedir}/taikoconfig.json`)) writeFileSync(`${homedir}/taikoconfig.json`, JSON.stringify(sample));
+if (!fs.existsSync(`${homedir}/taikoconfig.json`)) fs.writeFileSync(`${homedir}/taikoconfig.json`, JSON.stringify(sample));
 const config = require(`${homedir}/taikoconfig.json`);
 
 // Electron
 let win;
 
 app.on('ready', () => {
-  win = new BrowserWindow({height: 600, width: 800});
+  win = new BrowserWindow({ height: 600, width: 800 });
   win.loadFile('./public/index.html');
 
   if (config.tray === true) {
@@ -49,35 +49,18 @@ app.on('ready', () => {
 
 
 // Discord RPC
-if (config.rpc === true) {
+if (config.rpc) {
   const timestamp = new Date().getTime();
 
   const uRPC = new DiscordRPC({ clientID: '536293982209310730', debug: false }); //debug gang, lets not debug for now
 
   const setActivity = async () => {
-    ipcMain.on('RpcToSongSelect', () => {
-      uRPC.send('SET_ACTIVITY', util.rpcStatus(timestamp, 'Choosing a song'));
-    });
-
-    ipcMain.on('RpcToMainMenu', () => {
-      uRPC.send('SET_ACTIVITY', util.rpcStatus(timestamp, 'On the Main Menu'));
-    });
-
-    ipcMain.on('RpcToGame', (info, data) => {
-      uRPC.send('SET_ACTIVITY', util.rpcStatus(timestamp, data.songname, data.difficulty));
-    });
-
-    ipcMain.on('RpcToLoading', () => {
-      uRPC.send('SET_ACTIVITY', util.rpcStatus(timestamp, 'Loading...'));
-    });
-
-    ipcMain.on('RpcToPaused', () => {
-      uRPC.send('SET_ACTIVITY', util.rpcStatus(timestamp, 'Game Paused'));
-    });
-
-    ipcMain.on('RpcToMultiplayer', () => {
-      uRPC.send('SET_ACTIVITY', util.rpcStatus(timestamp, 'In Multiplayer'));
-    });
+    ipcMain.on('RpcToSongSelect', () => uRPC.send('SET_ACTIVITY', util.rpcStatus(timestamp, 'Choosing a song')));
+    ipcMain.on('RpcToMainMenu', () => uRPC.send('SET_ACTIVITY', util.rpcStatus(timestamp, 'On the Main Menu')));
+    ipcMain.on('RpcToGame', (info, data) => uRPC.send('SET_ACTIVITY', util.rpcStatus(timestamp, data.songname, data.difficulty)));
+    ipcMain.on('RpcToLoading', () => uRPC.send('SET_ACTIVITY', util.rpcStatus(timestamp, 'Loading...')));
+    ipcMain.on('RpcToPaused', () => uRPC.send('SET_ACTIVITY', util.rpcStatus(timestamp, 'Game Paused')));
+    ipcMain.on('RpcToMultiplayer', () => uRPC.send('SET_ACTIVITY', util.rpcStatus(timestamp, 'In Multiplayer')));
   };
 
   uRPC.on('ready', () => {
