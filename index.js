@@ -23,7 +23,7 @@ app.on('ready', () => {
   win.loadFile('./public/index.html');
 
   if (config.tray === true) {
-    let icon = nativeImage.createFromPath(join(__dirname, 'public', 'icon.png'));
+    let icon = nativeImage.createFromPath(path.join(__dirname, 'public', 'icon.png'));
     let tray = new Tray(icon);
     let contextMenu = Menu.buildFromTemplate([{
         label: 'Show',
