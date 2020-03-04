@@ -4,7 +4,7 @@
   "author": "ohlookitsderpy",
   "version": "1.0.0",
   "devDependencies": {
-    "electron-builder": "22.3.2",
+    "electron-builder": "22.3.6",
     "electron": "8.0.2"
   }
 }
