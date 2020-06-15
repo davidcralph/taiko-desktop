@@ -1,7 +1,5 @@
-const config = require(`${require('os').homedir()}/taikoconfig.json`);
-
 module.exports = class Util {
-    static rpcStatus(timestamp, content, optional) {
+    static rpcStatus(config, timestamp, content, optional) {
         if (!optional) {
             const status = {
                 pid: process.pid,
