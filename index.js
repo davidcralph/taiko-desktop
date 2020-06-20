@@ -55,19 +55,12 @@ if (config.rpc) {
 
   const rpc = new Ichigo('536293982209310730');
 
-  const setActivity = async () => {
-    ipcMain.on('RpcToSongSelect', () => rpc.send('SET_ACTIVITY', util.rpcStatus(config, timestamp, 'Choosing a song',)));
-    ipcMain.on('RpcToMainMenu', () => rpc.send('SET_ACTIVITY', util.rpcStatus(config, timestamp, 'On the Main Menu')));
-    ipcMain.on('RpcToGame', (info, data) => rpc.send('SET_ACTIVITY', util.rpcStatus(config, timestamp, data.songname, data.difficulty)));
-    ipcMain.on('RpcToLoading', () => rpc.send('SET_ACTIVITY', util.rpcStatus(config, timestamp, 'Loading...')));
-    ipcMain.on('RpcToPaused', () => rpc.send('SET_ACTIVITY', util.rpcStatus(config, timestamp, 'Game Paused')));
-    ipcMain.on('RpcToMultiplayer', () => rpc.send('SET_ACTIVITY', util.rpcStatus(config, timestamp, 'In Multiplayer')));
-  };
-
-  rpc.on('ready', () => {
-    setActivity();
-    setInterval(setActivity, 15e3);
-  });
+  ipcMain.on('RpcToSongSelect', () => rpc.send('SET_ACTIVITY', util.rpcStatus(config, timestamp, 'Choosing a song',)));
+  ipcMain.on('RpcToMainMenu', () => rpc.send('SET_ACTIVITY', util.rpcStatus(config, timestamp, 'On the Main Menu')));
+  ipcMain.on('RpcToGame', (info, data) => rpc.send('SET_ACTIVITY', util.rpcStatus(config, timestamp, data.songname, data.difficulty)));
+  ipcMain.on('RpcToLoading', () => rpc.send('SET_ACTIVITY', util.rpcStatus(config, timestamp, 'Loading...')));
+  ipcMain.on('RpcToPaused', () => rpc.send('SET_ACTIVITY', util.rpcStatus(config, timestamp, 'Game Paused')));
+  ipcMain.on('RpcToMultiplayer', () => rpc.send('SET_ACTIVITY', util.rpcStatus(config, timestamp, 'In Multiplayer')));
 
   rpc.connect();
 }

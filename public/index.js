@@ -16,10 +16,10 @@ const checkPresence = () => {
     else ipcRenderer.send('RpcToMainMenu');
 }
 
-setInterval(checkPresence, 5000);
+setInterval(checkPresence, 15000);
 
 // Config
-const config = require(`${require('os').homedir()}/taikoconfig.json`);
+const config = require(`${require('os').homedir()}\\taikoconfig.json`);
 
 if (!config.url) document.getElementById('frame').src = 'https://taiko.derpyenterprises.org';
 else document.getElementById('frame').src = config.url;
