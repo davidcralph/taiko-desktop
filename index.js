@@ -1,5 +1,4 @@
 // Declarations
-const util = require('./modules/util');
 const path = require('path');
 const { Ichigo } = require('@augu/ichigo');
 const fs = require('fs');
@@ -20,12 +19,17 @@ let win;
 app.commandLine.appendSwitch('disable-site-isolation-trials'); // Fix stuff
 
 app.on('ready', () => {
-  win = new BrowserWindow({ height: 600, width: 800, webPreferences: { nodeIntegration: true } });
+  win = new BrowserWindow({ 
+    height: 600, 
+    width: 800, 
+    webPreferences: { 
+      nodeIntegration: true 
+    } 
+  });
   win.loadFile('./public/index.html');
 
   if (config.tray === true) {
-    let icon = nativeImage.createFromPath(path.join(__dirname, 'public', 'icon.png'));
-    let tray = new Tray(icon);
+    let tray = new Tray(nativeImage.createFromPath(path.join(__dirname, 'public', 'icon.png')));
     let contextMenu = Menu.buildFromTemplate([{
         label: 'Show',
         click: () => win.show()
@@ -50,17 +54,35 @@ app.on('ready', () => {
 
 
 // Discord RPC
+const rpcStatus = (timestamp, content, optional) => {
+  return {
+      pid: process.pid,
+      activity: {
+          details: `Playing on ${config.url}`,
+          state: content,
+          timestamps: { start: timestamp },
+          assets: {
+              large_image: 'background',
+              large_text: 'Taiko Desktop',
+              small_image: optional ? optional : 'null',
+              small_text: optional ? optional[0].toUpperCase() + optional.substr(1) : 'null'
+          },
+          instance: false
+      }
+  }
+}
+
 if (config.rpc) {
   const timestamp = new Date().getTime();
 
   const rpc = new Ichigo('536293982209310730');
 
-  ipcMain.on('RpcToSongSelect', () => rpc.send('SET_ACTIVITY', util.rpcStatus(config, timestamp, 'Choosing a song',)));
-  ipcMain.on('RpcToMainMenu', () => rpc.send('SET_ACTIVITY', util.rpcStatus(config, timestamp, 'On the Main Menu')));
-  ipcMain.on('RpcToGame', (info, data) => rpc.send('SET_ACTIVITY', util.rpcStatus(config, timestamp, data.songname, data.difficulty)));
-  ipcMain.on('RpcToLoading', () => rpc.send('SET_ACTIVITY', util.rpcStatus(config, timestamp, 'Loading...')));
-  ipcMain.on('RpcToPaused', () => rpc.send('SET_ACTIVITY', util.rpcStatus(config, timestamp, 'Game Paused')));
-  ipcMain.on('RpcToMultiplayer', () => rpc.send('SET_ACTIVITY', util.rpcStatus(config, timestamp, 'In Multiplayer')));
+  ipcMain.on('RpcToSongSelect', () => rpc.send('SET_ACTIVITY', rpcStatus(timestamp, 'Choosing a song',)));
+  ipcMain.on('RpcToMainMenu', () => rpc.send('SET_ACTIVITY', rpcStatus(timestamp, 'On the Main Menu')));
+  ipcMain.on('RpcToGame', (_info, data) => rpc.send('SET_ACTIVITY', rpcStatus(timestamp, data.songname, data.difficulty)));
+  ipcMain.on('RpcToLoading', () => rpc.send('SET_ACTIVITY', rpcStatus(timestamp, 'Loading...')));
+  ipcMain.on('RpcToPaused', () => rpc.send('SET_ACTIVITY', rpcStatus(timestamp, 'Game Paused')));
+  ipcMain.on('RpcToMultiplayer', () => rpc.send('SET_ACTIVITY', rpcStatus(timestamp, 'In Multiplayer')));
 
   rpc.connect();
 }

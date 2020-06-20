@@ -2,17 +2,17 @@
 const { ipcRenderer } = require('electron');
 
 const checkPresence = () => {
-    if (document.getElementById('frame').contentWindow.document.getElementById('song-select')) ipcRenderer.send('RpcToSongSelect');
-    else if (document.getElementById('frame').contentWindow.document.getElementById('game')) {
-        if ((document.getElementById('frame').contentWindow.document.getElementById('game').classList.contains('game-paused'))) ipcRenderer.send('RpcToPaused');
-        if ((document.getElementById('frame').contentWindow.document.getElementById('game').classList.contains('multiplayer'))) ipcRenderer.send('RpcToMultiplayer');
-        const data = {
-            "songname": `${document.getElementById('frame').contentWindow.debugObj.controller.selectedSong.title}`,
-            "difficulty": `${document.getElementById('frame').contentWindow.debugObj.controller.selectedSong.difficulty}`
-        }
-        ipcRenderer.send('RpcToGame', data);
+    const iframe = document.getElementById('frame').contentWindow;
+    if (iframe.document.getElementById('song-select')) ipcRenderer.send('RpcToSongSelect');
+    else if (iframe.document.getElementById('game')) {
+        if ((iframe.document.getElementById('game').classList.contains('game-paused'))) ipcRenderer.send('RpcToPaused');
+        if ((iframe.document.getElementById('game').classList.contains('multiplayer'))) ipcRenderer.send('RpcToMultiplayer');
+        ipcRenderer.send('RpcToGame', {
+            "songname": `${iframe.debugObj.controller.selectedSong.title}`,
+            "difficulty": `${iframe.debugObj.controller.selectedSong.difficulty}`
+        });
     } 
-    else if (document.getElementById('frame').contentWindow.document.getElementById('load-song')) ipcRenderer.send('RpcToLoading');
+    else if (iframe.document.getElementById('load-song')) ipcRenderer.send('RpcToLoading');
     else ipcRenderer.send('RpcToMainMenu');
 }
 
