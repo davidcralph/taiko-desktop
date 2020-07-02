@@ -20,6 +20,4 @@ setInterval(checkPresence, 7500);
 
 // Config
 const config = require(`${require('os').homedir()}\\taikoconfig.json`);
-
-if (!config.url) document.getElementById('frame').src = 'https://taiko.derpyenterprises.org';
-else document.getElementById('frame').src = config.url;
+if (config.url) document.getElementById('frame').src = config.url;

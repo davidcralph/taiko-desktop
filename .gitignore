@@ -4,5 +4,5 @@ dist/
 node_modules/
 
 # Files
-package-lock.json
 yarn.lock
+package-lock.json
